@@ -12,8 +12,16 @@ app.directive('menuDirective', [
       {
         console.log( "menuDirective Runinng !" );
 
-        scope.openSideMenu = ( ) =>{
-          $ionicSideMenuDelegate.toggleRight();
+        scope.isExpensesClicked = false;
+
+        scope.toggleMenu = ( opt ) =>{
+          if( opt == 'expenses' ){
+            if( scope.isExpensesClicked == false ){
+              scope.isExpensesClicked = true;
+            }else{
+              scope.isExpensesClicked = false;
+            }
+          }
         }
 
         scope.onLoad = ( ) =>{

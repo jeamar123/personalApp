@@ -74,7 +74,8 @@ input{
 }
 
 .feed-wrapper .img-icon{
-  flex: 1;
+  /*flex: 1;*/
+  width: 40px;
 }
 
 .feed-wrapper .feed-user-info{
@@ -84,7 +85,7 @@ input{
 }
 
 .feed-wrapper .feed-header{
-  padding: 10px;
+  padding: 5px 10px;
   width: 100%;
   align-items: center!important;
   border-top: 1px solid #e1e1e1;
@@ -97,8 +98,102 @@ input{
   display: flex!important;
   align-items: center!important;
   background: #e6e6e6;
+  overflow: hidden;
 }
 
 .feed-wrapper .feed-desc{
   padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.expenses-wrapper{
+  padding: 10px;
+}
+
+.sidemenu-wrapper{
+  height: 100%;
+  overflow: hidden;
+  background: #f7f6f6;
+}
+
+.sidemenu-list li{
+  padding: 15px 30px;
+  color: #252525;
+  background: #f7f6f6;
+  font-size: 15px;
+}
+
+.sidemenu-list li i{
+  margin-right: 10px;
+  font-size: 25px;
+  position: relative;
+  top: 3px;
+  color: #737373;
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+}
+
+.sidemenu-list li.active{
+  background: #4FC5F1;
+  color: #fff;
+}
+
+.sidemenu-list li.active i{
+  color: #fff;
+}
+
+/*------------------*/
+
+.expenses-list li{
+  color: #252525;
+  background: #eae6e6;
+  font-size: 15px;
+  border-bottom: 1px solid #d0cccc;
+  padding: 15px 35px;
+}
+
+.expenses-list li i{
+  margin-right: 10px;
+  font-size: 25px;
+  position: relative;
+  top: 3px;
+  color: #737373;
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+}
+
+.expenses-list li.active{
+  background: #4FC5F1;
+  color: #fff;
+}
+
+.expenses-list li.active i{
+  color: #fff;
+}
+
+/*-------------*/
+
+.chat-list .img-icon{
+  width: 40px;
+}
+
+.chat-list .user-info{
+  display: flex!important;
+  padding: 0 10px;
+  flex: 9;
+}
+
+.chat-list .item{
+  padding:10px;
+}
+
+.chat-list .user-info i{
+  color: #a29e9e;
+  margin-left: 5px;
+}
+
+.chat-list .user-info .active i{
+  color: #55bb53;
 }

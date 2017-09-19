@@ -1,4 +1,4 @@
-<ion-side-menus >
+<ion-side-menus enable-menu-with-back-views="true">
   <div menu-directive>
     <ion-side-menu-content>
       <div class="bar bar-header bg-gray-theme">
@@ -6,7 +6,7 @@
         <h1 class="title">  </h1>
 
         <button class="button button-icon button-clear" menu-toggle="right">
-          <i class=" icon ion-navicon color-white"></i>
+          <i class="icon ion-navicon color-white"></i>
         </button>
       </div>
 
@@ -15,10 +15,41 @@
     
     <ion-side-menu side="right">
       <ion-header-bar class="bg-gray-theme">
-        <h1 class="title">Right Menu</h1>
+        <p class="full-width color-white display-flex flex-align-center no-margin justify-content-center">jmrplbrs</p>
       </ion-header-bar>
       <ion-content>
-        
+        <div class="sidemenu-wrapper">
+          <ul class="list sidemenu-list">
+              <li menu-close ui-sref="app.wall" ui-sref-active="active" class="item">
+                <i class="fa fa-bookmark"></i> Wall
+              </li>
+              <li menu-close ui-sref="app.chat" ui-sref-active="active" class="item">
+                <i class="ion-chatbubbles"></i> Chat
+              </li>
+              <li class="item" ng-class="{'active': isExpensesClicked == true}" ng-click="toggleMenu('expenses')">
+                <i class="ion-podium"></i> Expenses
+              </li>
+              <div ng-if="isExpensesClicked == true" class="expenses-drop">
+                <ul class="list expenses-list">
+                  <li menu-close ui-sref="app.expenses-overview" ui-sref-active="active" class="item">
+                    Overview
+                  </li>
+                  <li menu-close class="item">
+                    History
+                  </li>
+                  <li menu-close class="item">
+                    Statistics
+                  </li>
+                </ul>
+              </div>
+              <li menu-close ui-sref="app.profile" ui-sref-active="active" class="item">
+                <i class="ion-person"></i> Profile
+              </li>
+              <li menu-close ui-sref="login" class="item">
+                <i class="fa fa-sign-out"></i> Logout
+              </li>
+          </ul>
+        </div>
       </ion-content>
     </ion-side-menu>
   </div>

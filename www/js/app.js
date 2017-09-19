@@ -35,10 +35,9 @@ var app = angular.module('starter', ['ionic','appService'])
 
 
 .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider,  $httpProvider) {
-  // $ionicConfigProvider.tabs.position('bottom');
-  // $ionicConfigProvider.backButton.previousTitleText(false).text('');
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
 
-  // $ionicConfigProvider.views.transition('ios');
+  $ionicConfigProvider.views.transition('ios');
 
   $stateProvider
   .state('login', {
@@ -71,6 +70,46 @@ var app = angular.module('starter', ['ionic','appService'])
       }
     }  ,
     cache : false
+  })
+
+  .state('app.chat', {
+    url: "/chat",
+    views: {
+      'main-view': {
+        templateUrl: "templates/chat.html"
+      }
+    }  ,
+    cache : false
+  })
+
+  .state('app.chat-user', {
+    url: "/chat-user",
+    views: {
+      'main-view': {
+        templateUrl: "templates/chat-user.html"
+      }
+    }  ,
+    cache : false
+  })
+
+  .state('app.expenses', {
+    url: "/expenses",
+    views: {
+      'main-view': {
+        templateUrl: "templates/expenses.html"
+      }
+    }  ,
+    // cache : false
+  })
+
+  .state('app.expenses-overview', {
+    url: "/expenses-overview",
+    views: {
+      'main-view': {
+        templateUrl: "templates/expenses-overview.html"
+      }
+    }  ,
+    // cache : false
   })
 
 
