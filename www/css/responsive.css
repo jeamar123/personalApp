@@ -1,0 +1,145 @@
+    /* Custom, iPhone Retina */ 
+    @media only screen and (min-width : 320px) {
+        
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (min-width : 480px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (min-width : 992px) {
+        
+    }
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+
+    }
+
+
+
+    /*==========  Non-Mobile First Method  ==========*/
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (max-width : 1200px) {
+
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (max-width : 992px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (max-width : 768px) {
+
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (max-width : 480px) {
+
+    }
+
+    /* Custom, iPhone Retina */ 
+    @media only screen and (max-width : 360px) {
+        .brand .brand-details button {
+            font-size: 12px;
+        }
+    }
+
+    /* Custom, iPhone Retina */ 
+    @media only screen and (max-width : 320px) {
+        
+    }
+
+
+.col-md-1{
+    width: 8.33333333%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-2{
+    width: 16.66666666666667%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-3{
+    width: 25%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-4{
+    width: 33.33333333%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-5{
+    width: 41.66666666666667%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-6{
+    width: 50%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-7{
+    width: 58.33333333333334%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-8{
+   width: 66.66666667%;
+   float: left;
+   padding-left: 15px;
+   padding-right: 15px;
+}
+
+.col-md-9{
+    width: 75%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-10{
+    width: 83.3333333%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-11{
+    width: 91.66666666666666%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.col-md-12{
+    width: 100%;
+    float: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
