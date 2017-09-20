@@ -26,22 +26,9 @@
               <li menu-close ui-sref="app.chat" ui-sref-active="active" class="item">
                 <i class="ion-chatbubbles"></i> Chat
               </li>
-              <li class="item" ng-class="{'active': isExpensesClicked == true}" ng-click="toggleMenu('expenses')">
+              <li menu-close ui-sref="app.expenses" ui-sref-active="active" class="item" >
                 <i class="ion-podium"></i> Expenses
               </li>
-              <div ng-if="isExpensesClicked == true" class="expenses-drop">
-                <ul class="list expenses-list">
-                  <li menu-close ui-sref="app.expenses-overview" ui-sref-active="active" class="item">
-                    Overview
-                  </li>
-                  <li menu-close class="item">
-                    History
-                  </li>
-                  <li menu-close class="item">
-                    Statistics
-                  </li>
-                </ul>
-              </div>
               <li menu-close ui-sref="app.profile" ui-sref-active="active" class="item">
                 <i class="ion-person"></i> Profile
               </li>

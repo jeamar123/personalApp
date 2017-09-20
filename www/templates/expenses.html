@@ -1,10 +1,21 @@
-<ion-view>
-  <ion-content >
+<ion-view expenses-directive>
+  <ion-content scroll="false">
   	
   	<div class="main-wrapper">
-  		<!-- <div class="expenses-wrapper"> -->
-        
-      <!-- </div> -->
+  	  <div class="expenses-wrapper">
+  	  	<canvas id="pie" class="chart chart-pie"
+		  chart-data="expensesChartData" chart-labels="expensesChartLabels" chart-options="expensesChartOptions">
+		</canvas>
+      </div>
+
+      <ul class="list expenses-list" >
+          <li class="item">
+            <i class="fa fa-plus"></i> Add Expenses
+          </li>
+          <li class="item">
+            <i class="fa fa-file-text-o"></i> History
+          </li>
+        </ul>
   	</div>
     
   </ion-content>

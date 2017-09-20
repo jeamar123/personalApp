@@ -9,6 +9,8 @@
     "gulp-sass": "^3.1.0"
   },
   "dependencies": {
+    "angular-chart.js": "^1.1.1",
+    "chart.js": "^2.7.0",
     "cordova-plugin-console": "^1.0.5",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-splashscreen": "^4.0.3",
