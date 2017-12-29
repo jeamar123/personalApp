@@ -2,21 +2,95 @@
   <ion-content scroll="false">
   	
   	<div class="main-wrapper">
-  	  <div class="expenses-wrapper">
-  	  	<canvas id="pie" class="chart chart-pie"
-		  chart-data="expensesChartData" chart-labels="expensesChartLabels" chart-options="expensesChartOptions">
-		</canvas>
-      </div>
 
-      <ul class="list expenses-list" >
+      <div ng-if="show_main">
+    	  <div class="expenses-wrapper main-expenses-wrapper">
+          <h5 class="text-center text-weight-700">December 2017 <i class="fa fa-calendar" style="margin-left: 5px"></i>
+          </h5>
+          <div class="white-space-30"></div>
+    	  	<canvas id="pie" class="chart chart-pie"
+      		  chart-data="expensesChartData" chart-labels="expensesChartLabels" chart-options="expensesChartOptions">
+      		</canvas>
+          <div class="white-space-50"></div>
+
+          <div ng-if="isStatsShown" class="summary-wrapper">
+            <p><label>Income : </label>$ <span ng-if="!isEditIncomeShown" ng-bind="statistics.income">1000.00</span>
+              <a ng-if="!isEditIncomeShown" href="javascript:void(0)" ng-click="toggleEditIncome()"><i class="fa fa-pencil color-black-555" style="margin-left: 5px;"></i></a>
+              
+              <label ng-if="isEditIncomeShown" class="item item-input income-input">
+                <input type="text" name="" ng-model="statistics.income">
+              </label>
+              <button ng-if="isEditIncomeShown" ng-click="toggleEditIncome()" class="button btn-income">Done</button>
+            </p>
+            <p><label>Expenses : </label>$ <span ng-bind="statistics.expenses">700.00</span></p>
+            <p><label>Savings : </label>$ <span ng-bind="statistics.savings">300.00</span></p>
+          </div>
+        </div>
+
+        <ul class="list expenses-list" >
           <li class="item">
             <i class="fa fa-plus"></i> Add Expenses
           </li>
-          <li class="item">
-            <i class="fa fa-file-text-o"></i> History
+          <li class="item" ng-click="toggleListView()">
+            <i class="fa fa-file-text-o"></i> List
+          </li>
+          <li class="item" ng-click="toggleSettings()">
+            <i class="fa fa-cog"></i> Settings
           </li>
         </ul>
+      </div>
+
+      <div ng-if="show_list">
+        <div class="expenses-wrapper">
+
+          <div class="list-container">
+            <div ng-repeat="date in expenses_list" class="date-wrapper">
+              <p>
+                <label class="text-weight-700" ng-bind="date.date"></label> 
+                <a href="javascript:void(0)" ng-click="toggleListItems( date )" class="pull-right">
+                  <i ng-if="!date.showList" class="fa fa-angle-down color-black-555"></i>
+                  <i ng-if="date.showList" class="fa fa-angle-up color-black-555"></i>
+                </a>
+              </p>
+              <div ng-if="date.showList" ng-repeat="exp in date.expenses" class="list-expenses">
+                <p><span ng-bind="exp.desc"></span> <span class="pull-right">$ <span ng-bind="exp.value"></span></span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="white-space-50"></div>
+          <button class="button btn-settings-save" ng-click="toggleListView( )">DONE</button>
+          
+        </div>
+      </div>
+
+      <div ng-if="show_settings">
+        <div class="expenses-wrapper">
+          <div class="statistics-wrapper">
+            <ul class="list">
+              <li class="item text-weight-700" ng-click="toggleStatistics()">
+                Show Statistics <i ng-if="isStatsShown" class="fa fa-check color-green pull-right"></i>
+              </li>
+            </ul>
+          </div>
+
+          <div class="white-space-20"></div>
+
+          <div class="categories-wrapper">
+            <h5 class="text-weight-700">Categories</h5>
+            <ul class="list">
+              <li ng-repeat="cat in categories" class="item" ng-click="toggleCategory( cat )">
+                <span ng-bind="cat.category"></span> <i ng-if="cat.show" class="fa fa-check color-green pull-right"></i>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="white-space-50"></div>
+          <button class="button btn-settings-save" ng-click="toggleSettings()">SAVE</button>
+        </div>
+      </div>
+
   	</div>
-    
+
   </ion-content>
 </ion-view> 

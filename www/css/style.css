@@ -1,34 +1,28 @@
-/*
-@font-face {
-  font-family: 'Myriad-Pro-Regular';
-  src: url('../fonts/Myriad Pro Regular.ttf')  format('truetype');
-}*/
-
-
 body,html{
   height: 100%;
   width: 100%;
-  font-family: 'Roboto', sans-serif;
   background: #EEF2F5;
+  font-family: 'Helvetica Light' !important;
+  color: #333 !important;
 }
 
-b{
+/*b{
   font-weight: 700;
-}
+}*/
 
 
-a{
+/*a{*/
   /*color: #333;*/
-}
+/*}
 
 p{
   font-size: 14px;
-}
+}*/
 
-h1,h2,h3,h4,h5{
+/*h1,h2,h3,h4,h5{*/
   /*margin-top: 10px !important;
   margin-bottom: 10px !important;*/
-}
+/*}
 
 h5{
   font-size: 18px;
@@ -52,11 +46,7 @@ h1{
 
 a:hover{
   text-decoration: none;
-}
-
-input{
-
-}
+}*/
 
 /*------------------------------*/
 
@@ -66,7 +56,7 @@ input{
 } 
 
 .main-wrapper{
-  margin-top: 45px;
+  margin-top: 43px;
 }
 
 .feed-wrapper{
@@ -141,9 +131,65 @@ input{
 
 /*------------------*/
 
+.main-expenses-wrapper{
+  /*max-height: 65vh;
+  overflow-y: scroll;*/
+}
 
 .expenses-wrapper{
-  padding: 60px 20px;
+  padding: 20px;
+}
+
+.expenses-wrapper .btn-settings-save{
+  display: block;
+  margin: 0 auto;
+  width: 150px;
+  background: #5699ff;
+  color: #fff;
+  font-weight: 700;
+  min-height: unset;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.expenses-wrapper .summary-wrapper p{
+  margin-bottom: 5px;
+  color: #888 !important;
+}
+
+.expenses-wrapper .summary-wrapper p label{
+  font-weight: 700;
+  width: 100px;
+  display: inline-block;
+  color: #555 !important;
+}
+
+.expenses-wrapper .summary-wrapper .income-input{
+  height: 25px;
+  line-height: 25px;
+  padding: 0 6px;
+  position: relative;
+  top: 6px;
+}
+
+.expenses-wrapper .summary-wrapper .income-input input{
+  height: 23px;
+  padding: 0;
+}
+
+.expenses-wrapper .summary-wrapper .btn-income{
+  height: 25px;
+  min-height: unset;
+  line-height: 24px;
+  font-size: 12px;
+  background: #639fca;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 2px;
+  position: relative;
+  top: 5px;
 }
 
 .expenses-list{
@@ -162,7 +208,7 @@ input{
 
 .expenses-list li i{
   margin-right: 10px;
-  font-size: 25px;
+  font-size: 18px;
   position: relative;
   top: 3px;
   color: #737373;
@@ -194,4 +240,8 @@ input{
 
 .chat-list .user-info .active i{
   color: #55bb53;
+}
+
+.bg-gray-theme{
+    background: #424C58 !important;
 }
