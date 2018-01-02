@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('starter', ['ionic','appService','chart.js'])
+var app = angular.module('starter', ['ionic','appService','chart.js','ionic-datepicker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -30,6 +30,14 @@ var app = angular.module('starter', ['ionic','appService','chart.js'])
             input = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
             return $filter('date')(new Date(input), format);
         };
+    }
+])
+
+.factory('serverUrl',[
+    function factory(){
+      return {
+        url: 'http://localhost:8000/',
+      }
     }
 ])
 

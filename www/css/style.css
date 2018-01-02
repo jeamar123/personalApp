@@ -57,6 +57,7 @@ a:hover{
 
 .main-wrapper{
   margin-top: 43px;
+  height: 100%;
 }
 
 .feed-wrapper{
@@ -129,7 +130,16 @@ a:hover{
   color: #fff;
 }
 
-/*------------------*/
+
+
+
+
+
+
+
+
+
+/*--------- SETTINGS ---------*/
 
 .main-expenses-wrapper{
   /*max-height: 65vh;
@@ -217,6 +227,85 @@ a:hover{
   text-align: center;
 }
 
+.list-expenses .item{
+  margin: -1px -10px;
+  padding: 8px 10px;
+}
+
+.categories-wrapper .btn-add,
+.categories-wrapper .btn-delete{
+  min-height: unset;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  margin-top: -5px;
+  border: 1px solid #eee;
+}
+
+.categories-wrapper .btn-add.active,
+.categories-wrapper .btn-delete.active{
+  border:1px solid #009EC8;
+  background: #009EC8;
+  color: #fff;
+}
+
+.categories-wrapper .btn-submit-category{
+  display: block;
+  margin: 0 auto;
+  width: 150px;
+  background: #5699ff;
+  color: #fff;
+  font-weight: 700;
+  min-height: unset;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.categories-wrapper .cat-item.delete_active{
+  background-color: #f5d3d3;
+  border-color: transparent;
+}
+
+.categories-wrapper .cat-item.update_active{
+  background-color: #449d4457;
+  border-color: transparent;
+}
+
+.bottom-category-tabs{
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background: #f5f5f5;
+  z-index: 99;
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.bottom-category-tabs .opt-tab{
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.bottom-category-tabs .opt-tab:last-child{
+  border-right: none;
+}
+
+.bottom-category-tabs .opt-tab p{
+  margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
 /*-------------*/
 
 .chat-list .img-icon{
@@ -244,4 +333,103 @@ a:hover{
 
 .bg-gray-theme{
     background: #424C58 !important;
+}
+
+
+/*sweetalert overwrite*/
+
+.ionic_datepicker_popup .popup{
+  width: 80%;
+  min-width: 300px;
+}
+
+.ionic_datepicker_popup .popup .date_selection{
+  padding: 10px 0;
+}
+
+.ionic_datepicker_popup .popup .button_set{
+  display: none;
+}
+
+.month_select,
+.year_select
+{
+  height: 40px;
+}
+
+.select_section select{
+  left: 0 !important;
+  width: 100%;
+  max-width: unset;
+  direction: ltr;
+  padding: 0 10px !important;
+  font-weight: 700;
+  font-size: 20px;
+  font-family: 'Helvetica Light';
+}
+
+.select_section select option{
+  font-weight: 700;
+  font-size: 14px !important;
+}
+
+.sweet-alert .sa-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0;
+}
+
+.sweet-alert .sa-icon.sa-warning .sa-dot {
+  height: 7px;
+  bottom: 5px;
+}
+
+.sweet-alert .sa-icon.sa-warning .sa-body {
+  height: 20px;
+  top: 5px;
+}
+
+.sweet-alert .sa-icon.sa-error .sa-line.sa-right {
+  right: 3px;
+}
+
+.sweet-alert .sa-icon.sa-error .sa-line.sa-left {
+  left: 3px;
+}
+
+.sweet-alert .sa-icon.sa-error .sa-line {
+  width: 35px;
+  top: 17px;
+}
+
+.sweet-alert .sa-icon.sa-success{
+  overflow: hidden;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-line.sa-tip {
+  width: 18px;
+  left: 2px;
+  top: 24px;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-line.sa-long {
+  width: 30px;
+  right: 0px;
+  top: 20px;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-placeholder {
+  width: 40px;
+  height: 40px;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-fix {
+  height: 56px;
+  background-color: white;
+  left: 5px;
+  top: 3px;
+}
+
+.sweet-alert button{
+  margin-top: 12px;
 }
