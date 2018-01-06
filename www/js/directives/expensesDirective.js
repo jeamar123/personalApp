@@ -17,6 +17,8 @@ app.directive('expensesDirective', [
         scope.show_settings = false;
         scope.show_list = false;
 
+        scope.showWeeksIsTrue = true;
+
         scope.isStatsShown = false;
         scope.isEditIncomeShown = false;
 
@@ -59,6 +61,42 @@ app.directive('expensesDirective', [
           },
           {
             date : '01-01-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-02-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-03-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-04-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-05-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-06-18',
+            category : 'Fare',
+            desc : 'fare to home',
+            value : 36
+          },
+          {
+            date : '01-07-18',
             category : 'Fare',
             desc : 'fare to home',
             value : 36
@@ -176,6 +214,43 @@ app.directive('expensesDirective', [
           }
         }
 
+        scope.toggleWeeks = ( ) =>{
+          if( scope.showWeeksIsTrue ){
+            angular.forEach( scope.weekRange, function(value,key){
+              value.show = false;
+            });
+            scope.showWeeksIsTrue = false;
+          }else{
+            angular.forEach( scope.weekRange, function(value,key){
+              value.show = true;
+            });
+
+            scope.showWeeksIsTrue = true;
+          }
+         
+        }
+
+        scope.closeAllWeek = ( ) =>{
+          angular.forEach( scope.weekRange, function(value,key){
+            value.showDates = false;
+            angular.forEach( value.info, function(value2,key){
+              value2.showList = false;
+            });
+          });
+        }
+
+        scope.toggleWeekDates = ( list ) =>{
+          // scope.toggleWeeks();
+
+          if( list.showDates == true ){
+            list.showDates = false;
+          }else{
+            // scope.closeAllWeek( );
+            list.show = true;
+            list.showDates = true;
+          }
+        }
+
         scope.toggleListItems = ( list ) =>{
           if( list.showList == true ){
             list.showList = false;
@@ -264,7 +339,7 @@ app.directive('expensesDirective', [
 
           }
           scope.weekRange = weeks;
-          console.log(weeks);
+          // console.log(weeks);
           scope.filterExpensesByWeek(weeks);
         }
 
@@ -273,7 +348,10 @@ app.directive('expensesDirective', [
           scope.weekRange = weeks;
 
           angular.forEach( scope.weekRange, function( value, key ){
-            console.log(value);
+            // console.log(value);
+            value.info = [];
+            value.showDates = false;
+            value.show = true;
             angular.forEach( scope.expenses_list, function( value2, key ){
               
               var month = moment(scope.exp_list_month_selected).format('MMM');
@@ -289,12 +367,14 @@ app.directive('expensesDirective', [
               var isBetweenRange = moment(compare).isBetween( moment(start).subtract(1, 'days'), moment(end).add(1, 'days') );
               
               if( isBetweenRange ){
-                value.info = value2;
-                value.info.start = start;
-                value.info.end = end;
+                value.hasExp = true;
+                value.month = month;
+                value.info.push(value2);
               }
             });
           });
+
+          console.log(scope.weekRange);
         }
 
         scope.filterExpensesByDate = ( ) =>{
@@ -329,11 +409,9 @@ app.directive('expensesDirective', [
 
             if( key == (scope.expenses_dates.length-1) ){
               scope.getWeeks( scope.exp_list_month_selected );
-              console.log(scope.expenses_list);
+              // console.log(scope.expenses_list);
             }
           });
-
-          
         }
 
         scope.initializePieChart = ( ) =>{

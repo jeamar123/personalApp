@@ -50,29 +50,38 @@
           </h5>
           <div class="white-space-20"></div>
 
-          <div class="list-container">
-            <div ng-repeat="date in expenses_list" class="date-wrapper">
-              <p>
-                <label class="text-weight-700" ng-bind="date.date"></label> 
-                <a href="javascript:void(0)" ng-click="toggleListItems( date )" class="pull-right">
-                  <i ng-if="!date.showList" class="fa fa-angle-down color-black-555"></i>
-                  <i ng-if="date.showList" class="fa fa-angle-up color-black-555"></i>
-                </a>
-              </p>
-              <ul ng-if="date.showList" class="list-expenses list">
-                <li class="item" ng-repeat="exp in date.expenses">
-                  <span ng-bind="exp.desc"></span> 
-                  <span class="pull-right">$ <span ng-bind="exp.value"></span></span>
-                </li>
-                <div class="white-space-10"></div>
-                <li class="item font-13 text-weight-700">
-                  <span>Total</span> 
-                  <span class="pull-right">$ <span ng-bind="exp.total"></span>100</span>
-                </li>
-                <div class="white-space-20"></div>
-              </ul>
+          <div ng-if="week.hasExp" ng-hide="!week.show" class="week-wrapper" ng-repeat="week in weekRange">
+            <p ng-click="toggleWeekDates(week)" class="week-border-bottom">
+              Week {{$index+1}}
+              <span ng-if="!week.showDates"><i class="fa fa-caret-right"></i></span>
+              <span ng-if="week.showDates"><i class="fa fa-caret-down"></i></span>
+              <span class="pull-right font-16 text-weight-700">$ 100</span>
+            </p>
+
+            <div ng-if="week.showDates" class="list-container">
+              <div class="white-space-10"></div>
+              <div ng-click="toggleListItems( date )" ng-repeat="date in week.info" class="date-wrapper">
+                <p class="" ng-class="{ 'date-border-bottom' : !date.showList }">
+                  <label class="font-14 text-weight-700" ng-bind="date.date"></label> 
+                  <a href="javascript:void(0)" >
+                    <i ng-if="!date.showList" class="fa fa-caret-down color-black-555"></i>
+                    <i ng-if="date.showList" class="fa fa-caret-up color-black-555"></i>
+                  </a>
+                  <span class="pull-right font-14 text-weight-700">$ <span ng-bind="exp.total"></span>100</span>
+                </p>
+                <ul ng-if="date.showList" class="list-expenses list">
+                  <li class="item" ng-repeat="exp in date.expenses">
+                    <span class="font-12" ng-bind="exp.desc"></span> 
+                    <span class="pull-right font-11 text-weight-700">$ <span ng-bind="exp.value"></span></span>
+                  </li>
+                  <div class="white-space-10"></div>
+                </ul>
+              </div>
+              <div class="white-space-10"></div>
             </div>
           </div>
+
+          
 
           <div class="white-space-50"></div>
           <button class="button btn-settings-save" ng-click="toggleListView( )">DONE</button>
