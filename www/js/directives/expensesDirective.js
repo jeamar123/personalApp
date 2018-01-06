@@ -16,6 +16,7 @@ app.directive('expensesDirective', [
         scope.show_main = true;
         scope.show_settings = false;
         scope.show_list = false;
+        scope.show_add_expenses = false;
 
         scope.showWeeksIsTrue = true;
 
@@ -29,8 +30,8 @@ app.directive('expensesDirective', [
         scope.editCategoryShow = false;
         // 
 
-        scope.expenses_list = [];
         scope.category_list = [];
+        scope.expenses_dates = [];
 
         scope.update_category_selected = [];
         scope.delete_category_selected = [];
@@ -40,6 +41,7 @@ app.directive('expensesDirective', [
         };
 
         scope.weekRange = [];
+        scope.monthly_total = 0;
 
         scope.statistics = {
           income : "1000.00",
@@ -50,82 +52,11 @@ app.directive('expensesDirective', [
         scope.summary_month_selected = moment().format( 'MMMM YYYY' );
         scope.exp_list_month_selected = moment().format( 'MMMM YYYY' );
 
-        var summaryDatePickerObj;
+        var month = moment(scope.exp_list_month_selected).format('MMM');
+        var year = moment(scope.exp_list_month_selected).format('YYYY');
 
-        scope.expenses_dates = [
-          {
-            date : '01-01-18',
-            category : 'Fare',
-            desc : 'fare to office',
-            value : 19
-          },
-          {
-            date : '01-01-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-02-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-03-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-04-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-05-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-06-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-07-18',
-            category : 'Fare',
-            desc : 'fare to home',
-            value : 36
-          },
-          {
-            date : '01-08-18',
-            category : 'Food',
-            desc : 'Dinner',
-            value : 200
-          },
-          {
-            date : '01-09-18',
-            category : 'Fare',
-            desc : 'fare to gaisano',
-            value : 6
-          },
-          {
-            date : '01-09-18',
-            category : 'Fare',
-            desc : 'fare to gaisano',
-            value : 6
-          },
-          {
-            date : '01-15-18',
-            category : 'Personal',
-            desc : 't-shirt',
-            value : 149
-          },
-        ];
+        var summaryDatePickerObj;
+        
 
         scope.toggleCatOpt = ( ) =>{
           scope.delCategoryShow = false;
@@ -210,7 +141,102 @@ app.directive('expensesDirective', [
           }else{
             scope.show_list = true;
             scope.show_main = false;
-            scope.filterExpensesByDate( );
+            // scope.filterExpensesByDate( );
+            scope.getWeeks( scope.exp_list_month_selected );
+          }
+        }
+
+        scope.getWeeks = ( month ) =>{
+          month = moment(month, 'YYYY-MM-DD');
+
+          var first = month.day() == 0 ? 6 : month.day()-1;
+          var day = 7-first;
+
+          var last = month.daysInMonth();
+          var count = (last-day)/7;
+
+          var weeks = [];
+          weeks.push([1, day]);
+          for (var i=0; i < count; i++) {
+            weeks.push([(day+1), (Math.min(day+=7, last))]);
+          }
+          scope.weekRange = weeks;
+          console.log(weeks);
+          // scope.filterExpensesByWeek(weeks);
+          scope.createDatesFromWeek(weeks);
+        }
+
+        scope.createDatesFromWeek = ( weeks ) =>{
+          scope.monthly_total = 0;
+
+          angular.forEach( weeks, function(value,key){
+            // console.log(value);
+            value.days = [];
+            value.showDates = false;
+            value.show = true;
+            value.weekly_total = 0;
+            for (var i = value[0]; i <= value[1]; i++) {
+              value.days.push({
+                date : moment( month + " " + i + ", " +  year, 'MMM DD, YYYY').format('MMMM DD, YYYY'),
+                expenses : [],
+                daily_total : 0,
+                show_list : false
+              })
+            }
+
+            if( key == (scope.weekRange.length-1) ){
+              // console.log( scope.weekRange );
+              scope.addExpensesByWeek( scope.weekRange );
+            }
+          });
+        }
+
+        scope.addExpensesByWeek = ( weeks ) =>{
+
+          angular.forEach( weeks, function( value, key ){
+            // console.log(value);
+            angular.forEach( value.days, function( value2, key ){
+              // console.log(value2);
+              angular.forEach( scope.expenses_dates, function( value3, key ){
+                // console.log(value3);
+                if( value2.date == moment(value3.date).format('MMMM DD, YYYY') ){
+                  value2.daily_total += value3.value;
+                  value2.expenses.push(value3);
+                }
+              });
+
+              value.weekly_total += value2.daily_total;
+            });
+
+            scope.monthly_total += value.weekly_total;
+          });
+
+          // console.log( scope.weekRange );
+        }
+
+        scope.initializePieChart = ( ) =>{
+          scope.expensesChartLabels = [];
+          scope.expensesChartData = [];
+
+          angular.forEach( scope.category_list, function( value, key ){
+            // console.log(value);
+            if( value.show == true ){
+              scope.expensesChartLabels.push( value.category_name );
+              scope.expensesChartData.push( value.value );
+            }
+          });
+
+          scope.expensesChartOptions = {
+            legend: {
+              display: true,
+              position: 'left',
+              labels: {
+                  // fontColor: 'rgb(255, 99, 132)'
+                  fontWeight: 700,
+                  boxWidth: 10,
+              },
+
+            }
           }
         }
 
@@ -227,7 +253,6 @@ app.directive('expensesDirective', [
 
             scope.showWeeksIsTrue = true;
           }
-         
         }
 
         scope.closeAllWeek = ( ) =>{
@@ -323,120 +348,13 @@ app.directive('expensesDirective', [
           }
         }
 
-        scope.getWeeks = ( month ) =>{
-          month = moment(month, 'YYYY-MM-DD');
-
-          var first = month.day() == 0 ? 6 : month.day()-1;
-          var day = 7-first;
-
-          var last = month.daysInMonth();
-          var count = (last-day)/7;
-
-          var weeks = [];
-          weeks.push([1, day]);
-          for (var i=0; i < count; i++) {
-            weeks.push([(day+1), (Math.min(day+=7, last))]);
-
-          }
-          scope.weekRange = weeks;
-          // console.log(weeks);
-          scope.filterExpensesByWeek(weeks);
-        }
-
-        scope.filterExpensesByWeek = ( weeks ) =>{
-
-          scope.weekRange = weeks;
-
-          angular.forEach( scope.weekRange, function( value, key ){
-            // console.log(value);
-            value.info = [];
-            value.showDates = false;
-            value.show = true;
-            angular.forEach( scope.expenses_list, function( value2, key ){
-              
-              var month = moment(scope.exp_list_month_selected).format('MMM');
-              var year = moment(scope.exp_list_month_selected).format('YYYY');
-              var start = moment( month + " " + value[0] + ", " +  year, 'MMM DD, YYYY').format('MMM DD, YYYY');
-              var end = moment( month + " " + value[1] + ", " +  year, 'MMM DD, YYYY').format('MMM DD, YYYY');
-              var compare = moment(value2.date).format('MMM DD, YYYY');
-
-              // console.log(start);
-              // console.log(end);
-              // console.log(compare);
-
-              var isBetweenRange = moment(compare).isBetween( moment(start).subtract(1, 'days'), moment(end).add(1, 'days') );
-              
-              if( isBetweenRange ){
-                value.hasExp = true;
-                value.month = month;
-                value.info.push(value2);
-              }
-            });
-          });
-
-          console.log(scope.weekRange);
-        }
-
-        scope.filterExpensesByDate = ( ) =>{
-          scope.expenses_list = [];
-          var temp_date = null;
-          var ctr = 0;
-
-          angular.forEach( scope.expenses_dates, function( value, key ){
-
-            if( temp_date == null ){
-              temp_date = value.date;
-              scope.expenses_list.push({
-                date : moment(temp_date).format( 'MMMM DD, YYYY' ),
-                showList : false,
-                expenses : [value]
-              });
-            }else{
-              if( temp_date == value.date ){
-                scope.expenses_list[ctr].expenses.push(value);
-                
-              }else{
-                temp_date = value.date;
-                scope.expenses_list.push({
-                  date : moment(temp_date).format( 'MMMM DD, YYYY' ),
-                  showList : false,
-                  expenses : [value]
-                });
-
-                ctr++;
-              }
-            }
-
-            if( key == (scope.expenses_dates.length-1) ){
-              scope.getWeeks( scope.exp_list_month_selected );
-              // console.log(scope.expenses_list);
-            }
-          });
-        }
-
-        scope.initializePieChart = ( ) =>{
-          scope.expensesChartLabels = [];
-          scope.expensesChartData = [];
-
-          angular.forEach( scope.category_list, function( value, key ){
-            // console.log(value);
-            if( value.show == true ){
-              scope.expensesChartLabels.push( value.category_name );
-              scope.expensesChartData.push( value.value );
-            }
-          });
-
-          scope.expensesChartOptions = {
-            legend: {
-              display: true,
-              position: 'left',
-              labels: {
-                  // fontColor: 'rgb(255, 99, 132)'
-                  fontWeight: 700,
-                  boxWidth: 10,
-              },
-
-            }
+        scope.toggleAddExpenses = ( ) =>{
+          if( scope.show_add_expenses == true ){
+            scope.show_add_expenses = false;
+            scope.show_main = true;
+          }else{
+            scope.show_add_expenses = true;
+            scope.show_main = false;
           }
         }
 
@@ -534,6 +452,28 @@ app.directive('expensesDirective', [
             });
         }
 
+        scope.fetchExpenses = ( ) =>{
+          appModule.getExpenses()
+            .then(function(response){
+              console.log(response);
+              scope.expenses_dates = response.data;
+            });
+        }
+
+        scope.submitExpenses = ( data ) =>{
+          var data = {
+            'date' : data.date,
+            'category' : data.category,
+            'description' : data.desc,
+            'value' : data.value,
+          }
+
+          appModule.addCategories( data )
+            .then(function(response){
+              console.log(response);
+            });
+        }
+
         scope.initializeDatePicker = ( ) =>{
           summaryDatePickerObj = {
             callback: function (val) {  
@@ -586,6 +526,7 @@ app.directive('expensesDirective', [
         scope.onLoad = ( ) =>{
           scope.initializeDatePicker( );
           scope.fetchCategories( );
+          scope.fetchExpenses( );
         }
 
         scope.onLoad();

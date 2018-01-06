@@ -146,6 +146,23 @@ a:hover{
   overflow-y: scroll;*/
 }
 
+.btn-add-expenses{
+  display: block;
+  margin: 0 auto 20px auto;
+  width: 150px;
+  background: #5699ff;
+  color: #fff;
+  font-weight: 700;
+  min-height: unset;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.add-expenses-wrapper .list-inset{
+  margin: 10px;
+}
+
 .expenses-wrapper{
   padding: 20px;
 }
