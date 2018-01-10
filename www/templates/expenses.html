@@ -47,33 +47,39 @@
           <div class="white-space-10"></div>
           <div class="list list-inset">
             <label class="item item-input">
-              <input type="text" placeholder="Date">
+              <input type="text" placeholder="Date" ng-model="expenses_form.date" ng-click="toggleSummaryDatePicker()">
               <i class="icon ion-calendar placeholder-icon" style="padding-right: 10px;"></i>
             </label>
           </div>
+
+          <div style="position: relative;">
+            <div class="list list-inset">
+              <label class="item item-input">
+                <input type="text" placeholder="Category" ng-model="expenses_form.category_name" ng-click="toggleCatOptExpForm()">
+                <i class="icon fa fa-caret-down placeholder-icon" style="padding-right: 13px;"></i>
+              </label>
+            </div>
+            <div ng-if="showDropCat" class="list-categoryies" >
+              <p ng-repeat="cat in category_list" ng-click="setSelectedCategory(cat)" class="item" ng-bind="cat.category_name"></p>
+            </div>
+          </div>
+
           <div class="list list-inset">
             <label class="item item-input">
-              <input type="text" placeholder="Category">
-              <i class="icon fa fa-caret-down placeholder-icon" style="padding-right: 13px;"></i>
+              <input type="text" placeholder="Description" ng-model="expenses_form.desc">
             </label>
           </div>
-          <div class="list-categoryies" ng-repeat="cat in category_list">
-            <p class="list" ng-bind="cat.category_name"></p>
-          </div>
           <div class="list list-inset">
             <label class="item item-input">
-              <input type="text" placeholder="Description">
-            </label>
-          </div>
-          <div class="list list-inset">
-            <label class="item item-input">
-              <input type="text" placeholder="Value">
+              <input id="inputExpensesValue" type="text" numbers-only placeholder="Value" ng-model="expenses_form.value">
             </label>
           </div>
 
-          <div class="white-space-50"></div>
-          <button class="button btn-add-expenses" >SUBMIT</button>
-          <button class="button btn-add-expenses " ng-click="toggleAddExpenses()">CANCEL</button>
+          <div class="white-space-20"></div>
+          <p ng-if="add_success" class="text-success text-center text-weight-700"><i class="fa fa-check color-green"></i> Successfully added</p>
+          <p ng-if="add_error" class="text-error text-center text-weight-700"><i class="fa fa-times color-red"></i> Something went wrong</p>
+          <button ng-disabled="!expenses_form.date || !expenses_form.category_name || !expenses_form.category_name || !expenses_form.desc || !expenses_form.value" class="button btn-add-expenses" ng-click="submitExpenses(expenses_form)">SUBMIT</button>
+          <button class="button btn-cancel " ng-click="toggleAddExpenses()">CANCEL</button>
           
         </div>
       </div>
@@ -96,8 +102,8 @@
 
             <div ng-if="week.showDates" class="list-container">
               <div class="white-space-10"></div>
-              <div ng-click="toggleListItems( date )" ng-repeat="date in week.days" class="date-wrapper">
-                <p class="" ng-class="{ 'date-border-bottom' : !date.showList }">
+              <div ng-repeat="date in week.days" class="date-wrapper">
+                <p ng-click="toggleListItems( date )" class="" ng-class="{ 'date-border-bottom' : !date.showList }">
                   <label class="font-14 text-weight-700" ng-bind="date.date"></label> 
                   <a href="javascript:void(0)" >
                     <i ng-if="!date.showList" class="fa fa-caret-down color-black-555"></i>
@@ -106,7 +112,7 @@
                   <span class="pull-right font-14 text-weight-700">$ <span ng-bind="date.daily_total">100</span></span>
                 </p>
                 <ul ng-if="date.showList" class="list-expenses list">
-                  <li class="item" ng-repeat="exp in date.expenses">
+                  <li class="item" ng-repeat="exp in date.expenses" ng-click="toggleExpenses(exp)">
                     <span class="font-12" ng-bind="exp.description"></span> 
                     <span class="pull-right font-11 text-weight-700">$ <span ng-bind="exp.value"></span></span>
                   </li>
@@ -195,6 +201,17 @@
           <p>Edit</p>
         </div>
         <div class="opt-tab" ng-click="toggleDeleteCategory()">
+          <i class="fa fa-minus"></i>
+          <p>Del</p>
+        </div>
+      </div>
+
+      <div ng-if="isExpensesListOptShow" class="bottom-category-tabs">
+        <div class="opt-tab" ng-click="toggleEditExpenses()">
+          <i class="fa fa-pencil"></i>
+          <p>Edit</p>
+        </div>
+        <div class="opt-tab" ng-click="DeleteExpenses()">
           <i class="fa fa-minus"></i>
           <p>Del</p>
         </div>

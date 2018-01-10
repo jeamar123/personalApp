@@ -146,10 +146,27 @@ a:hover{
   overflow-y: scroll;*/
 }
 
+
+
+.btn-cancel{
+  display: block;
+  margin: 0 auto 20px auto;
+  width: 80%;
+  max-width: 500px;
+  background: #d6dde6;
+  color: #fff;
+  font-weight: 700;
+  min-height: unset;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
 .btn-add-expenses{
   display: block;
   margin: 0 auto 20px auto;
-  width: 150px;
+  width: 80%;
+  max-width: 500px;
   background: #5699ff;
   color: #fff;
   font-weight: 700;
@@ -159,8 +176,27 @@ a:hover{
   font-size: 14px;
 }
 
+.btn-add-expenses:hover,
+.btn-cancel:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
 .add-expenses-wrapper .list-inset{
   margin: 10px;
+}
+
+.add-expenses-wrapper .list-categoryies{
+  margin: 0px 11px;
+  position: absolute;
+  top: 48px;
+  width: 94.8%;
+  z-index: 99;
+  /*display: none;*/
+}
+
+.add-expenses-wrapper .list-categoryies .item{
+  background: #fbfbfb;
 }
 
 .expenses-wrapper{
@@ -246,8 +282,8 @@ a:hover{
 
 .week-wrapper > p,
 .week-wrapper .date-wrapper > p{
-  margin-bottom: 5px;
-  padding-bottom: 5px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .week-wrapper .week-border-bottom,
@@ -382,17 +418,51 @@ a:hover{
 }
 
 .ionic_datepicker_popup .popup .date_selection{
-  padding: 10px 0;
+  padding: 0 0 10px 0 !important;
 }
 
 .ionic_datepicker_popup .popup .button_set{
+  /*display: none;*/
+  margin: 0;
+}
+
+.ionic_datepicker_popup .popup-body .show_nav {
+    padding: 0 0 0 0 !important;
+}
+
+.ionic_datepicker_popup .popup .button_close{
   display: none;
+}
+
+.ionic_datepicker_popup .date_col{
+  background-color: #FFF !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  color: #757373 !important;
+  border: none !important;
+  margin: 2px 8px !important
+
+}
+
+.ionic_datepicker_popup .selected_date {
+  color: #e6a631 !important;
+  font-family: 'Helvetica Neu Bold' !important;
+  background: #e8e4e4 !important;
+}
+
+.ionic_datepicker_popup .today {
+  color: #5674e4 !important;
+  font-family: 'Helvetica Neu Bold' !important;
 }
 
 .month_select,
 .year_select
 {
   height: 40px;
+}
+
+.ionic_datepicker_popup .calendar_grid {
+    height: 170px !important;
 }
 
 .select_section select{

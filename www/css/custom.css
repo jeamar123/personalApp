@@ -179,11 +179,11 @@ input,textarea,button{
 /*-------- TEXT STYLES / ALIGNMENT---------*/
 
 .text-error{
-    color: #c9302c;
+    color: #c9302c !important;
 }
 
 .text-success{
-    color: #449d44;
+    color: #449d44 !important;
 }
 
 .text-italic{
@@ -486,11 +486,11 @@ input,textarea,button{
 /*-------- COLORS AND BACKGROUNDS ---------*/
 
 .color-red{
-    color: #c9302c;
+    color: #c9302c !important;
 }
 
 .color-green{
-    color: #449d44;
+    color: #449d44 !important;
 }
 
 .color-gray{

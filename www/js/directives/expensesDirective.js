@@ -13,6 +13,9 @@ app.directive('expensesDirective', [
       {
         console.log( "expensesDirective Runinng !" );
 
+        scope.add_success = false;
+        scope.add_error = false;
+
         scope.show_main = true;
         scope.show_settings = false;
         scope.show_list = false;
@@ -29,6 +32,13 @@ app.directive('expensesDirective', [
         scope.addCategoryShow = false;
         scope.editCategoryShow = false;
         // 
+
+        // inside expenses list
+        scope.isExpensesListOptShow = false;
+
+        scope.selected_expenses = {};
+
+        scope.showDropCat = false;
 
         scope.category_list = [];
         scope.expenses_dates = [];
@@ -57,6 +67,13 @@ app.directive('expensesDirective', [
 
         var summaryDatePickerObj;
         
+        scope.toggleCatOptExpForm = ( ) =>{
+          if( scope.showDropCat == true ){
+            scope.showDropCat = false;
+          }else{
+            scope.showDropCat = true;
+          }
+        }
 
         scope.toggleCatOpt = ( ) =>{
           scope.delCategoryShow = false;
@@ -75,6 +92,12 @@ app.directive('expensesDirective', [
           }else{
             scope.isEditIncomeShown = true;
           }
+        }
+
+        scope.resetCategoryActive = ( ) =>{
+          angular.forEach( scope.category_list, function( value, key ){
+            value.active = false;
+          });
         }
 
         scope.resetCategoryActive = ( ) =>{
@@ -277,6 +300,7 @@ app.directive('expensesDirective', [
         }
 
         scope.toggleListItems = ( list ) =>{
+          scope.isExpensesListOptShow = false;
           if( list.showList == true ){
             list.showList = false;
           }else{
@@ -341,7 +365,7 @@ app.directive('expensesDirective', [
             scope.update_category_selected = [];
             scope.delete_category_selected = [];
 
-            scope.initializePieChart( );
+            scope.onLoad();
           }else{
             scope.show_settings = true;
             scope.show_main = false;
@@ -352,10 +376,16 @@ app.directive('expensesDirective', [
           if( scope.show_add_expenses == true ){
             scope.show_add_expenses = false;
             scope.show_main = true;
+            scope.onLoad();
           }else{
             scope.show_add_expenses = true;
             scope.show_main = false;
           }
+        }
+
+        scope.valueKeyPress = ( data, e ) =>{
+          console.log('sdfdsf');
+          if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
         }
 
         scope.addCategories = ( cat ) =>{
@@ -452,6 +482,26 @@ app.directive('expensesDirective', [
             });
         }
 
+        scope.toggleExpenses = ( exp ) =>{
+          console.log(exp);
+          // if( scope.isExpensesListOptShow == true ){
+          //   scope.isExpensesListOptShow = false;
+          //   scope.selected_expenses = {};
+          // }else{
+            scope.isExpensesListOptShow = true;
+            scope.selected_expenses = exp;
+          // }
+        }
+
+        scope.expenses_form = {};
+
+        scope.setSelectedCategory = ( cat ) =>{
+          scope.expenses_form.category_id = cat.id;
+          scope.expenses_form.category_name = cat.category_name;
+
+          scope.toggleCatOptExpForm();
+        }
+
         scope.fetchExpenses = ( ) =>{
           appModule.getExpenses()
             .then(function(response){
@@ -461,23 +511,50 @@ app.directive('expensesDirective', [
         }
 
         scope.submitExpenses = ( data ) =>{
+          console.log(data);
           var data = {
-            'date' : data.date,
-            'category' : data.category,
+            'date' : moment(data.date).format('YYYY-MM-DD'),
+            'category_id' : data.category_id,
+            'category_name' : data.category_name,
             'description' : data.desc,
             'value' : data.value,
           }
 
-          appModule.addCategories( data )
+          appModule.addExpenses( data )
             .then(function(response){
               console.log(response);
+
+              if( response.data.status == true ){
+                scope.add_success = true;
+                scope.add_error = false;
+
+                scope.expenses_form = {};
+              }else{
+                scope.add_success = false;
+                scope.add_error = true;
+              }
             });
         }
 
         scope.initializeDatePicker = ( ) =>{
           summaryDatePickerObj = {
             callback: function (val) {  
-              // console.log(val);
+              console.log(val);
+
+              var date = scope.setDatePicker();
+
+              if( scope.show_main || scope.show_list ){
+                scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
+                $( ".sum-date" ).text( scope.summary_month_selected );
+                console.log(scope.summary_month_selected);
+              }
+
+              if( scope.show_add_expenses ){
+                scope.expenses_form.date = moment(date).format( 'MMMM DD, YYYY' );
+                console.log(scope.expenses_form.date);
+              }
+              
+              scope.initializeDatePicker();
             },
             inputDate: new Date( moment(scope.summary_month_selected).format( 'YYYY,MM,DD' ) ),      
             mondayFirst: true,          
@@ -514,9 +591,6 @@ app.directive('expensesDirective', [
           var day = $( ".calendar_grid .selected_date" ).text();
           var month = $( ".month_select select" ).val();
           var year = ($( ".year_select select" ).val()).replace('number:','');
-          // console.log(day);
-          // console.log(month);
-          // console.log(year);
 
           var date_selected = moment(month + " " + day + ", " + year, 'MMM D, YYYY');
 
@@ -531,15 +605,23 @@ app.directive('expensesDirective', [
 
         scope.onLoad();
 
+        // $(document).on("click", ".button_close", function() {
+        //   var date = scope.setDatePicker();
 
+        //   if( scope.show_main || scope.show_list ){
+        //     scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
+        //     $( ".sum-date" ).text( scope.summary_month_selected );
+        //     console.log(scope.summary_month_selected);
+        //   }
 
-        $(document).on("click", ".button_close", function() {
-          var date = scope.setDatePicker();
-          scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
-          $( ".sum-date" ).text( scope.summary_month_selected );
-          scope.initializeDatePicker();
-          // console.log(scope.summary_month_selected);
-        });
+        //   if( scope.show_add_expenses ){
+        //     scope.expenses_form.date = moment(date).format( 'MMMM DD, YYYY' );
+        //     console.log(scope.expenses_form.date);
+        //   }
+          
+        //   scope.initializeDatePicker();
+          
+        // });
 
       }
     }
