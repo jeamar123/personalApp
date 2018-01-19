@@ -1,45 +1,46 @@
 <ion-view expenses-directive>
-  <ion-content scroll="false">
+  <ion-content>
   	
-  	<div class="main-wrapper">
+  	<div class="main-wrapper" scroll="true">
 
       <div ng-if="show_main">
     	  <div class="expenses-wrapper main-expenses-wrapper">
-          <h5 ng-click="toggleSummaryDatePicker()"  class="text-center text-weight-700">
+          <!-- <h5 ng-click="toggleSummaryDatePicker()"  class="text-center text-weight-700 no-margin-top no-margin-bottom">
             <span class="sum-date" ng-bind="summary_month_selected">December 2017</span>
             <i class="fa fa-calendar" style="margin-left: 5px"></i>
-          </h5>
-          <div class="white-space-30"></div>
-    	  	<canvas id="pie" class="chart chart-pie"
-      		  chart-data="expensesChartData" chart-labels="expensesChartLabels" chart-options="expensesChartOptions">
-      		</canvas>
-          <div class="white-space-50"></div>
-
-          <div ng-if="isStatsShown" class="summary-wrapper">
-            <p><label>Income : </label>$ <span ng-if="!isEditIncomeShown" ng-bind="statistics.income">1000.00</span>
-              <a ng-if="!isEditIncomeShown" href="javascript:void(0)" ng-click="toggleEditIncome()"><i class="fa fa-pencil color-black-555" style="margin-left: 5px;"></i></a>
-              
-              <label ng-if="isEditIncomeShown" class="item item-input income-input">
-                <input type="text" name="" ng-model="statistics.income">
-              </label>
-              <button ng-if="isEditIncomeShown" ng-click="toggleEditIncome()" class="button btn-income">Done</button>
-            </p>
-            <p><label>Expenses : </label>$ <span ng-bind="statistics.expenses">700.00</span></p>
-            <p><label>Savings : </label>$ <span ng-bind="statistics.savings">300.00</span></p>
+          </h5> -->
+          <!-- <div class="white-space-20"></div> -->
+          <div class="stat-box">
+            <div class="white-space-20"></div>
+            <canvas id="pie" class="chart chart-pie"
+              chart-data="expensesChartData" chart-labels="expensesChartLabels" chart-options="expensesChartOptions">
+            </canvas>
+            <div class="white-space-20"></div>
           </div>
-        </div>
 
-        <ul class="list expenses-list" >
-          <li class="item" ng-click="toggleAddExpenses()">
-            <i class="fa fa-plus"></i> Add Expenses
-          </li>
-          <li class="item" ng-click="toggleListView()">
-            <i class="fa fa-file-text-o"></i> List
-          </li>
-          <li class="item" ng-click="toggleSettings()">
-            <i class="fa fa-cog"></i> Settings
-          </li>
-        </ul>
+          <div class="stat-box">
+            <label class="font-12 text-weight-700">Monthly Budget</label>
+            <p class="text-center text-weight-700 value">
+              <span>$<span>1000.00</span></span>
+            </p>
+          </div>
+
+          <div class="stat-box">
+            <label class="font-12 text-weight-700">Total Expenses</label>
+            <p class="text-center text-weight-700 value">
+              <span>$<span ng-bind="statistics.expenses">700.00</span></span>
+            </p>
+          </div>
+
+          <div class="stat-box">
+            <label class="font-12 text-weight-700">Savings</label>
+            <p class="text-center text-weight-700 value">
+              <span>$<span ng-bind="statistics.savings">300.00</span></span>
+            </p>
+          </div>
+
+          <div class="white-space-50"></div>
+        </div>
       </div>
 
       <div ng-if="show_add_expenses">
@@ -86,67 +87,81 @@
 
       <div ng-if="show_list">
         <div class="expenses-wrapper">
-          <h5 class="text-center text-weight-700">
-            <span ng-bind="exp_list_month_selected">December 2017</span>
-            <i ng-click="toggleSummaryDatePicker()" class="fa fa-calendar" style="margin-left: 5px"></i>
-          </h5>
-          <div class="white-space-20"></div>
+          <div ng-if="week.show" class="week-wrapper" ng-class="{'no-value' : week.weekly_total == 0}" ng-repeat="week in weekRange" >
+            <p ng-if="!showSelectedWeekDays" ng-click="toggleWeekDates(week)" class="week-border-bottom" ng-class="{'week-border-bottom2' : week.showDates}">
+              <span ng-if="!week.showDates">Week {{$index+1}}</span>
 
-          <div ng-hide="!week.show" class="week-wrapper" ng-repeat="week in weekRange">
-            <p ng-click="toggleWeekDates(week)" class="week-border-bottom">
-              Week {{$index+1}}
-              <span ng-if="!week.showDates"><i class="fa fa-caret-down"></i></span>
-              <span ng-if="week.showDates"><i class="fa fa-caret-up"></i></span>
-              <span class="pull-right font-16 text-weight-700">$ <span ng-bind="week.weekly_total">100</span></span>
+              <span ng-if="week.showDates" class="font-16 text-weight-700">
+                <span ng-bind="selected_month"></span>
+                ( <span ng-bind="week[0]"></span> - <span ng-bind="week[1]"></span> )
+              </span>
+
+              <span ng-if="!week.showDates"><i class="fa fa-caret-down margin-left-5"></i></span>
+              <span ng-if="week.showDates" ng-class="{'pull-right' : week.showDates}"><i class="fa fa-caret-up font-20 margin-left-5"></i></span>
+
+              <span ng-if="!week.showDates" class="pull-right font-16 text-weight-700">$ <span ng-bind="week.weekly_total">100</span></span>
             </p>
 
-            <div ng-if="week.showDates" class="list-container">
-              <div class="white-space-10"></div>
-              <div ng-repeat="date in week.days" class="date-wrapper">
-                <p ng-click="toggleListItems( date )" class="" ng-class="{ 'date-border-bottom' : !date.showList }">
-                  <label class="font-14 text-weight-700" ng-bind="date.date"></label> 
+            <p ng-if="showSelectedWeekDays" class="week-border-bottom week-border-bottom2 text-center" >
+              <span class="pull-left">
+                <a ng-click="toggleListItems( selected_date )" class="fa fa-arrow-circle-left font-20 color-black-555" href="javascript:void(0)"></a>
+              </span>
+              <span ng-bind="selected_date.date"></span>
+              <span class="pull-right">
+                <a ng-click="toggleAddExpenses( selected_date )" class="fa fa-plus-circle font-20 color-black-555" href="javascript:void(0)"></a>
+              </span>
+            </p>
+
+            <div ng-if="week.showDates && !showSelectedWeekDays" class="list-container">
+
+              <div ng-repeat="date in week.days" class="date-wrapper" ng-class="{'no-value' : date.daily_total == 0}">
+                <p ng-click="toggleListItems( date )" class="">
                   <a href="javascript:void(0)" >
-                    <i ng-if="!date.showList" class="fa fa-caret-down color-black-555"></i>
-                    <i ng-if="date.showList" class="fa fa-caret-up color-black-555"></i>
+                    <i class="fa fa-search margin-right-5 color-black-555"></i>
                   </a>
+                  <label class="font-14 text-weight-700" ng-bind="date.date"></label> 
+                  
                   <span class="pull-right font-14 text-weight-700">$ <span ng-bind="date.daily_total">100</span></span>
                 </p>
-                <ul ng-if="date.showList" class="list-expenses list">
-                  <li class="item" ng-repeat="exp in date.expenses" ng-click="toggleExpenses(exp)">
-                    <span class="font-12" ng-bind="exp.description"></span> 
-                    <span class="pull-right font-11 text-weight-700">$ <span ng-bind="exp.value"></span></span>
-                  </li>
-                  <div class="white-space-10"></div>
-                </ul>
               </div>
-              <div class="white-space-10"></div>
+
+            </div>
+
+            <div ng-if="showSelectedWeekDays" class="list-container">
+              <div ng-repeat="exp in selected_date.expenses" class="date-wrapper">
+                <p  ng-click="toggleExpenses(exp)" class="">
+                  <label class="font-14 text-weight-700 color-black-000" ng-bind="exp.description"></label> 
+                  <span class="pull-right font-12  text-weight-700">$ <span ng-bind="exp.value">100</span></span>
+                  <br>
+                  <span class="font-10" >Category : <span ng-bind="exp.category"></span></span>
+                </p>
+              </div>
             </div>
           </div>
 
+          <div class="white-space-20"></div>
+          <p ng-if="showSelectedWeekDays" class="font-16 text-weight-700" style="padding: 0 15px;">Total : <span class="pull-right">$ <span ng-bind="selected_date.daily_total">100</span></span></p> 
+
+          <p ng-if="weekSelected && !showSelectedWeekDays" class="font-16 text-weight-700" style="padding: 0 15px;">Weekly Total : <span class="pull-right">$ <span ng-bind="selected_weekly_total">100</span></span></p> 
+
+          <p ng-if="!weeksClosed" class="font-16 text-weight-700" style="padding: 0 15px;">Monthly Total : <span class="pull-right">$ <span ng-bind="monthly_total">100</span></span></p> 
           <div class="white-space-30"></div>
-          <p class="font-20 text-weight-700">Monthly Total : <span class="pull-right">$ <span ng-bind="monthly_total">100</span></span></p> 
-          <div class="white-space-30"></div>
-          <button class="button btn-settings-save" ng-click="toggleListView( )">DONE</button>
-          
+          <div class="white-space-50"></div>
         </div>
       </div>
 
       <div ng-if="show_settings">
-        <div class="expenses-wrapper">
-          <div class="statistics-wrapper">
-            <ul class="list">
-              <li class="font-18 text-weight-700" ng-click="toggleStatistics()">
-                Show Statistics <i ng-if="isStatsShown" class="fa fa-check color-green pull-right"></i>
-              </li>
-            </ul>
-          </div>
-
-          <div class="white-space-20"></div>
-
+        <div class="expenses-wrapper ">
+        
           <div class="categories-wrapper">
+            <div class="white-space-10"></div>
+            <div class="white-space-5"></div>
             <h5 class="text-weight-700">Categories 
               <span class="pull-right">
-                <a href="javascript:void(0)" ng-click="toggleCatOpt()"><i class="fa fa-cog color-black-555" style="margin-right: 5px"></i></a>
+                <a href="javascript:void(0)" ng-click="toggleCatOpt()">
+                  <i ng-if="!isCategoryOptShow" class="fa fa-cog color-black-555" ></i>
+                  <i ng-if="isCategoryOptShow" class="fa fa-times color-black-555" ></i>
+                </a>
               </span>
             </h5>
 
@@ -185,39 +200,60 @@
           </div>
           
           <div class="white-space-50"></div>
-          <button ng-if="!isCategoryOptShow" class="button btn-settings-save" ng-click="toggleSettings()">DONE</button>
-          <button ng-if="delCategoryShow" class="button btn-settings-save" ng-click="deleteAllSelected()" ng-disabled="category_selected.length == 0">Delete</button>
+          <!-- <button ng-if="!isCategoryOptShow" class="button btn-settings-save" ng-click="toggleSettings()">DONE</button> -->
+          <button ng-if="delCategoryShow" class="button btn-settings-save" ng-click="deleteAllSelectedCat()" ng-disabled="category_selected.length == 0">Delete</button>
           
         </div>
       </div>
 
-      <div ng-if="isCategoryOptShow" class="bottom-category-tabs">
-        <div class="opt-tab" ng-click="toggleAddCategory()">
-          <i class="fa fa-plus"></i>
-          <p>Add</p>
-        </div>
-        <div class="opt-tab" ng-click="toggleEditCategory()">
-          <i class="fa fa-pencil"></i>
-          <p>Edit</p>
-        </div>
-        <div class="opt-tab" ng-click="toggleDeleteCategory()">
-          <i class="fa fa-minus"></i>
-          <p>Del</p>
-        </div>
-      </div>
-
-      <div ng-if="isExpensesListOptShow" class="bottom-category-tabs">
-        <div class="opt-tab" ng-click="toggleEditExpenses()">
-          <i class="fa fa-pencil"></i>
-          <p>Edit</p>
-        </div>
-        <div class="opt-tab" ng-click="DeleteExpenses()">
-          <i class="fa fa-minus"></i>
-          <p>Del</p>
-        </div>
-      </div>
 
   	</div>
 
+    
+
   </ion-content>
+  <div ng-if="isCategoryOptShow" class="bottom-category-tabs">
+    <div class="opt-tab" ng-class="{'active' : addCategoryShow}" ng-click="toggleAddCategory()">
+      <i class="fa fa-plus"></i>
+      <p>Add</p>
+    </div>
+    <div class="opt-tab" ng-class="{'active' : editCategoryShow}" ng-click="toggleEditCategory()">
+      <i class="fa fa-pencil"></i>
+      <p>Edit</p>
+    </div>
+    <div class="opt-tab" ng-class="{'active' : delCategoryShow}" ng-click="toggleDeleteCategory()">
+      <i class="fa fa-minus"></i>
+      <p>Del</p>
+    </div>
+  </div>
+
+  <div ng-if="isExpensesListOptShow" class="bottom-category-tabs">
+    <div class="opt-tab" ng-click="toggleEditExpenses()">
+      <i class="fa fa-pencil"></i>
+      <p>Edit</p>
+    </div>
+    <div class="opt-tab" ng-click="DeleteExpenses()">
+      <i class="fa fa-minus"></i>
+      <p>Del</p>
+    </div>
+  </div>
+
+  <div ng-if="mainOptShow" class="bottom-category-tabs">
+    <div class="opt-tab" ng-class="{'active' : show_main}" ng-click="toggleChartView()">
+      <i class="fa fa-pie-chart"></i>
+      <p>Reports</p>
+    </div>
+    <div class="opt-tab" ng-class="{'active' : show_list}" ng-click="toggleListView()">
+      <i class="fa fa-file-text"></i>
+      <p>Expenses</p>
+    </div>
+    <div class="opt-tab" ng-class="{'active' : show_add_expenses}" ng-click="toggleAddExpenses()">
+      <i class="fa fa-plus-circle"></i>
+      <p>Add</p>
+    </div>
+    <div class="opt-tab" ng-class="{'active' : show_settings}" ng-click="toggleSettings()">
+      <i class="fa fa-cog"></i> 
+      <p>Settings</p>
+    </div>
+  </div>
 </ion-view> 

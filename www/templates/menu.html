@@ -3,7 +3,9 @@
     <ion-side-menu-content>
       <div class="bar bar-header bg-gray-theme">
         
-        <h1 class="title">  </h1>
+        <h1 class="title header-title">
+          <div ng-if="showDatePicker" ng-click="toggleSummaryDatePicker()"><span ng-bind="summary_month_selected"></span></div>
+        </h1>
 
         <button class="button button-icon button-clear" menu-toggle="right">
           <i class="icon ion-navicon color-white"></i>
@@ -15,7 +17,7 @@
     
     <ion-side-menu side="right">
       <ion-header-bar class="bg-gray-theme">
-        <p class="full-width color-white display-flex flex-align-center no-margin justify-content-center">jmrplbrs</p>
+        <p class="full-width color-white display-flex flex-align-center no-margin justify-content-center" style="padding-left: 15px;">jmrplbrs</p>
       </ion-header-bar>
       <ion-content>
         <div class="sidemenu-wrapper">

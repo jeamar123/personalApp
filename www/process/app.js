@@ -87,7 +87,7 @@ var app = angular.module('starter', ['ionic','appService','chart.js','ionic-date
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
-    // controller: 'AppCtrl',
+    controller: 'AppCtrl',
     cache : false
   })
 
