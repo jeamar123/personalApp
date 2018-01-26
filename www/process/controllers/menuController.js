@@ -1,6 +1,6 @@
 app.controller('AppCtrl', function( $state, $scope , $rootScope ){
 
-	console.log( $state );
+	// console.log( $state );
 
 	$scope.current_page = $state.current.name;
 

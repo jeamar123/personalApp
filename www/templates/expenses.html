@@ -21,21 +21,21 @@
           <div class="stat-box">
             <label class="font-12 text-weight-700">Monthly Budget</label>
             <p class="text-center text-weight-700 value">
-              <span>$<span>1000.00</span></span>
+              <span>$<span ng-bind="statistics.budget">1000</span>.00</span>
             </p>
           </div>
 
           <div class="stat-box">
             <label class="font-12 text-weight-700">Total Expenses</label>
             <p class="text-center text-weight-700 value">
-              <span>$<span ng-bind="statistics.expenses">700.00</span></span>
+              <span>$<span ng-bind="statistics.expenses">700</span>.00</span>
             </p>
           </div>
 
           <div class="stat-box">
             <label class="font-12 text-weight-700">Savings</label>
             <p class="text-center text-weight-700 value">
-              <span>$<span ng-bind="statistics.savings">300.00</span></span>
+              <span>$<span ng-bind="statistics.savings">300</span>.00</span>
             </p>
           </div>
 
@@ -174,6 +174,10 @@
                 </span>
               </li>
             </ul>
+
+            <p ng-if="category_list.length == 0" class="text-center text-italic">
+              No Categories yet.
+            </p>
 
             <div ng-if="addCategoryShow" class="add-cat-container">
               <div class="white-space-20"></div>

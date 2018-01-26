@@ -58,9 +58,9 @@ app.directive('expensesDirective', [
         scope.monthly_total = 0;
 
         scope.statistics = {
-          income : "1000.00",
-          expenses : "700.00",
-          savings : "300.00"
+          budget : 1000,
+          expenses : 0,
+          savings : 0
         }
 
         scope.summary_month_selected = moment().format( 'MMMM YYYY' );
@@ -100,8 +100,8 @@ app.directive('expensesDirective', [
           scope.selected_date = {};
           scope.expenses_form = {};
 
-          scope.category_list = [];
-          scope.expenses_dates = [];
+          // scope.category_list = [];
+          // scope.expenses_dates = [];
           scope.update_category_selected = [];
           scope.delete_category_selected = [];
 
@@ -137,6 +137,40 @@ app.directive('expensesDirective', [
           $('body').scrollTop(0);
         }
 
+        scope.toggleAddExpenses = ( date ) =>{
+          if( scope.category_list.length > 0 ){
+            scope.show_settings = false;
+            scope.show_list = false;
+
+            if( scope.show_add_expenses == true ){
+              scope.show_add_expenses = false;
+              scope.show_main = true;
+              scope.onLoad();
+            }else{
+              scope.showAllWeeks();
+              if( date ){
+                scope.expenses_form.date = date.date;
+              }
+              scope.show_add_expenses = true;
+              scope.show_main = false;
+            }
+          }else{
+            swal({
+              title: 'Alert',
+              text: 'Please create at least one(1) Category first.',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Go',
+              cancelButtonText: 'Cancel'
+            }, function(result){
+              if( result ){
+                scope.$apply(function ( ) {
+                  scope.toggleSettings();
+                })
+              }
+            });
+          }
+        }
 
       // ---- ADD EXPENSES -----
         scope.toggleCatOptExpForm = ( ) =>{
@@ -144,24 +178,6 @@ app.directive('expensesDirective', [
             scope.showDropCat = false;
           }else{
             scope.showDropCat = true;
-          }
-        }
-
-        scope.toggleAddExpenses = ( date ) =>{
-          scope.show_settings = false;
-          scope.show_list = false;
-
-          if( scope.show_add_expenses == true ){
-            scope.show_add_expenses = false;
-            scope.show_main = true;
-            scope.onLoad();
-          }else{
-            scope.showAllWeeks();
-            if( date ){
-              scope.expenses_form.date = date.date;
-            }
-            scope.show_add_expenses = true;
-            scope.show_main = false;
           }
         }
 
@@ -191,6 +207,8 @@ app.directive('expensesDirective', [
                 scope.add_error = false;
 
                 scope.expenses_form = {};
+                scope.fetchExpensesMonth( scope.summary_month_selected );
+                scope.getWeeks( scope.exp_list_month_selected );
               }else{
                 scope.add_success = false;
                 scope.add_error = true;
@@ -450,6 +468,30 @@ app.directive('expensesDirective', [
         }
 
       // -------------------
+        scope.getFirstEndDate = ( month ) =>{
+          var firstMonth = moment( month, "MMMM YYYY" ).format('YYYY-MM-DD');
+          var lastMonth = moment( month, "MMMM YYYY" ).format('YYYY-MM-DD');
+
+          var date1 = new Date(firstMonth);
+          var date2 = new Date(lastMonth);
+          var y1 = date1.getFullYear();
+          var m1 = date1.getMonth();
+          var y2 = date2.getFullYear();
+          var m2 = date2.getMonth();
+          var firstDay = new Date(y1, m1, 1);
+          var lastDay = new Date(y2, m2 + 1, 0);
+
+          firstDay = moment(firstDay).format('YYYY-MM-DD');
+          lastDay = moment(lastDay).format('YYYY-MM-DD');
+
+          // console.log(firstDay);
+          // console.log(lastDay);
+
+          return {
+            start: firstDay,
+            end: lastDay,
+          }
+        }
 
         scope.getWeeks = ( month ) =>{
           month = moment(month, 'YYYY-MM-DD');
@@ -532,8 +574,9 @@ app.directive('expensesDirective', [
               if( scope.show_main || scope.show_list ){
                 scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
                 $( ".sum-date" ).text( scope.summary_month_selected );
-                // console.log(scope.summary_month_selected);
+                console.log(scope.summary_month_selected);
                 $rootScope.$broadcast('setDatePicker', {date:scope.summary_month_selected} );
+                scope.fetchExpensesMonth( scope.summary_month_selected );
               }
               if( scope.show_add_expenses ){
                 scope.expenses_form.date = moment(date).format( 'MMMM DD, YYYY' );
@@ -542,7 +585,8 @@ app.directive('expensesDirective', [
               
               scope.initializeDatePicker();
             },
-            inputDate: new Date( moment(scope.summary_month_selected).format( 'YYYY,MM,DD' ) ),      
+            inputDate: new Date( moment( ).format( 'YYYY,MM,DD' ) ),      
+            // inputDate: new Date( moment(scope.summary_month_selected).format( 'YYYY,MM,DD' ) ),      
             mondayFirst: true,          
             closeOnSelect: false,       
             templateType: 'popup',
@@ -583,6 +627,8 @@ app.directive('expensesDirective', [
               scope.expensesChartLabels.push( value.category_name );
               scope.expensesChartData.push( value.value );
             }
+            // console.log(scope.expensesChartLabels);
+            // console.log(scope.expensesChartData);
           });
 
           scope.expensesChartOptions = {
@@ -591,7 +637,8 @@ app.directive('expensesDirective', [
               position: 'left',
               labels: {
                   // fontColor: 'rgb(255, 99, 132)'
-                  fontWeight: 700,
+                  // fontWeight: 700,
+                  fontSize: 18,
                   boxWidth: 10,
               },
             },
@@ -605,7 +652,7 @@ app.directive('expensesDirective', [
               scope.category_list = response.data;
 
               angular.forEach( scope.category_list, function(value,key){
-                value.value = '300.00';
+                value.value = 0;
                 value.show = true;
 
                 if( (scope.category_list.length - 1) == key ){
@@ -615,19 +662,48 @@ app.directive('expensesDirective', [
             });
         }
 
+        scope.fetchExpensesMonth = ( month ) =>{
+          var data = scope.getFirstEndDate( month );
+
+          appModule.getExpensesPerMonth( data )
+            .then(function(response){
+              console.log(response);
+              scope.expenses_dates = response.data;
+
+              angular.forEach( scope.expenses_dates, function( value, key ){
+                // console.log(value);
+                var cat_index = $.inArray( value.category, scope.expensesChartLabels);
+
+                scope.expensesChartData[cat_index] += value.value; 
+                scope.statistics.expenses += value.value;
+                scope.statistics.savings = scope.statistics.budget - scope.statistics.expenses;
+              });
+            });
+        }
+
         scope.fetchExpenses = ( ) =>{
           appModule.getExpenses()
             .then(function(response){
               console.log(response);
               scope.expenses_dates = response.data;
+
+              angular.forEach( scope.expenses_dates, function( value, key ){
+                // console.log(value);
+                var cat_index = $.inArray( value.category, scope.expensesChartLabels);
+
+                scope.expensesChartData[cat_index] += value.value; 
+                scope.statistics.expenses += value.value;
+                scope.statistics.savings = scope.statistics.budget - scope.statistics.expenses;
+              });
             });
         }
 
         scope.onLoad = ( ) =>{
+          scope.resetAll( );
           scope.initializeDatePicker( );
           scope.fetchCategories( );
-          scope.fetchExpenses( );
-          scope.resetAll( );
+          // scope.fetchExpenses( );
+          scope.fetchExpensesMonth( scope.summary_month_selected );
         }
 
         scope.onLoad();

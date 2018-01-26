@@ -569,7 +569,15 @@ a:hover{
 }
 
 .ionic_datepicker_popup .calendar_grid {
-    height: 170px !important;
+    height: 200px !important;
+}
+
+.ionic_datepicker_popup .popup-body .selected_date_full {
+  background: #2a394a !important;
+}
+
+.ionic_datepicker_popup .popup-buttons button {
+  background: #2a394a !important;
 }
 
 .select_section select{
@@ -651,7 +659,7 @@ a:hover{
 
 .sweet-alert .sa-button-container > button{
   width: 45%;
-  margin: 0;
+  /*margin: 0;*/
 }
 
 .sweet-alert .sa-confirm-button-container{

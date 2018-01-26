@@ -9,6 +9,10 @@ appService.factory('appModule', function( serverUrl, $http ){
     return $http.get(serverUrl.url + 'expenses');
   };
 
+  appFactory.getExpensesPerMonth = function( data ) {
+    return $http.post(serverUrl.url + 'expenses/month', data);
+  };
+
   appFactory.addExpenses = function( data ) {
     return $http.post(serverUrl.url + 'expenses', data);
   };
