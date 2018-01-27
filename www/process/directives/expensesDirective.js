@@ -63,7 +63,6 @@ app.directive('expensesDirective', [
           savings : 0
         }
 
-        scope.summary_month_selected = moment().format( 'MMMM YYYY' );
         scope.exp_list_month_selected = moment().format( 'MMMM YYYY' );
         scope.selected_month = moment(scope.exp_list_month_selected).format( 'MMM' );
 
@@ -123,7 +122,7 @@ app.directive('expensesDirective', [
           scope.show_list = true;
           scope.show_add_expenses = false;
           // scope.filterExpensesByDate( );
-          scope.getWeeks( scope.exp_list_month_selected );
+          // scope.getWeeks( scope.exp_list_month_selected );
           scope.showAllWeeks();
           $('body').scrollTop(0);
         }
@@ -207,7 +206,7 @@ app.directive('expensesDirective', [
                 scope.add_error = false;
 
                 scope.expenses_form = {};
-                scope.fetchExpensesMonth( scope.summary_month_selected );
+                scope.fetchExpensesMonth( scope.exp_list_month_selected );
                 scope.getWeeks( scope.exp_list_month_selected );
               }else{
                 scope.add_success = false;
@@ -303,12 +302,20 @@ app.directive('expensesDirective', [
 
         scope.toggleCategory = ( cat ) =>{
           // console.log(cat);
-          if( !scope.isCategoryOptShow ){
-            if( cat.show == true ){
-              cat.show = false;
-            }else{
-              cat.show = true;
-            }
+
+          if( scope.isCategoryOptShow == true && !scope.delCategoryShow && !scope.editCategoryShow && !scope.addCategoryShow ){
+            swal({
+              title: 'Alert',
+              text: 'Please select an option below.',
+              type: 'warning',
+              showCancelButton: false,
+              confirmButtonText: 'Ok',
+              cancelButtonText: 'Cancel'
+            }, function(result){
+              if( result ){
+
+              }
+            });
           }
 
           if( scope.delCategoryShow ){
@@ -468,6 +475,7 @@ app.directive('expensesDirective', [
         }
 
       // -------------------
+
         scope.getFirstEndDate = ( month ) =>{
           var firstMonth = moment( month, "MMMM YYYY" ).format('YYYY-MM-DD');
           var lastMonth = moment( month, "MMMM YYYY" ).format('YYYY-MM-DD');
@@ -523,6 +531,7 @@ app.directive('expensesDirective', [
             value.weekly_total = 0;
             for (var i = value[0]; i <= value[1]; i++) {
               value.days.push({
+                day : moment( month + " " + i + ", " +  year, 'MMM DD, YYYY').format('ddd'),
                 date : moment( month + " " + i + ", " +  year, 'MMM DD, YYYY').format('MMMM DD, YYYY'),
                 expenses : [],
                 daily_total : 0,
@@ -531,7 +540,7 @@ app.directive('expensesDirective', [
             }
 
             if( key == (scope.weekRange.length-1) ){
-              console.log( scope.weekRange );
+              // console.log( scope.weekRange );
               scope.addExpensesByWeek( scope.weekRange );
             }
           });
@@ -572,12 +581,13 @@ app.directive('expensesDirective', [
               var date = scope.setDatePicker();
 
               if( scope.show_main || scope.show_list ){
-                scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
-                $( ".sum-date" ).text( scope.summary_month_selected );
-                console.log(scope.summary_month_selected);
-                $rootScope.$broadcast('setDatePicker', {date:scope.summary_month_selected} );
-                scope.fetchExpensesMonth( scope.summary_month_selected );
+                $( ".sum-date" ).text( scope.exp_list_month_selected );
+                scope.exp_list_month_selected = moment(date).format( 'MMMM YYYY' );
+                $rootScope.$broadcast('setDatePicker', {date:scope.exp_list_month_selected} );
+                scope.fetchExpensesMonth( scope.exp_list_month_selected );
+                // console.log(scope.exp_list_month_selected);
               }
+
               if( scope.show_add_expenses ){
                 scope.expenses_form.date = moment(date).format( 'MMMM DD, YYYY' );
                 // console.log(scope.expenses_form.date);
@@ -585,8 +595,8 @@ app.directive('expensesDirective', [
               
               scope.initializeDatePicker();
             },
-            inputDate: new Date( moment( ).format( 'YYYY,MM,DD' ) ),      
-            // inputDate: new Date( moment(scope.summary_month_selected).format( 'YYYY,MM,DD' ) ),      
+            inputDate: ( scope.exp_list_month_selected != moment().format( 'MMMM YYYY' ) ) ? new Date( moment(scope.exp_list_month_selected).format( 'YYYY,MM,DD' ) ) : new Date( moment( ).format( 'YYYY,MM,DD' ) ),      
+            // inputDate: new Date( moment(scope.exp_list_month_selected).format( 'YYYY,MM,DD' ) ),      
             mondayFirst: true,          
             closeOnSelect: false,       
             templateType: 'popup',
@@ -637,8 +647,8 @@ app.directive('expensesDirective', [
               position: 'left',
               labels: {
                   // fontColor: 'rgb(255, 99, 132)'
-                  // fontWeight: 700,
-                  fontSize: 18,
+                  fontStyle: 'bold',
+                  fontSize: 14,
                   boxWidth: 10,
               },
             },
@@ -669,6 +679,8 @@ app.directive('expensesDirective', [
             .then(function(response){
               console.log(response);
               scope.expenses_dates = response.data;
+              scope.statistics.expenses = 0;
+              scope.statistics.savings = 0;
 
               angular.forEach( scope.expenses_dates, function( value, key ){
                 // console.log(value);
@@ -677,24 +689,15 @@ app.directive('expensesDirective', [
                 scope.expensesChartData[cat_index] += value.value; 
                 scope.statistics.expenses += value.value;
                 scope.statistics.savings = scope.statistics.budget - scope.statistics.expenses;
+
+                if( (scope.expenses_dates.length - 1) == key ){
+                  scope.getWeeks( scope.exp_list_month_selected );
+                }
               });
-            });
-        }
 
-        scope.fetchExpenses = ( ) =>{
-          appModule.getExpenses()
-            .then(function(response){
-              console.log(response);
-              scope.expenses_dates = response.data;
-
-              angular.forEach( scope.expenses_dates, function( value, key ){
-                // console.log(value);
-                var cat_index = $.inArray( value.category, scope.expensesChartLabels);
-
-                scope.expensesChartData[cat_index] += value.value; 
-                scope.statistics.expenses += value.value;
-                scope.statistics.savings = scope.statistics.budget - scope.statistics.expenses;
-              });
+              if( scope.expenses_dates.length == 0 ){
+                scope.getWeeks( scope.exp_list_month_selected );
+              }
             });
         }
 
@@ -702,8 +705,7 @@ app.directive('expensesDirective', [
           scope.resetAll( );
           scope.initializeDatePicker( );
           scope.fetchCategories( );
-          // scope.fetchExpenses( );
-          scope.fetchExpensesMonth( scope.summary_month_selected );
+          scope.fetchExpensesMonth( scope.exp_list_month_selected );
         }
 
         scope.onLoad();
@@ -711,26 +713,6 @@ app.directive('expensesDirective', [
         scope.$on( 'toggleSummaryDatePicker', ( evt, data )  => {
           scope.toggleSummaryDatePicker( );
         })
-
-        // $rootScope.$broadcast('monthChange', {date:date} );
-
-        // $(document).on("click", ".button_close", function() {
-        //   var date = scope.setDatePicker();
-
-        //   if( scope.show_main || scope.show_list ){
-        //     scope.summary_month_selected = moment(date).format( 'MMMM YYYY' );
-        //     $( ".sum-date" ).text( scope.summary_month_selected );
-        //     console.log(scope.summary_month_selected);
-        //   }
-
-        //   if( scope.show_add_expenses ){
-        //     scope.expenses_form.date = moment(date).format( 'MMMM DD, YYYY' );
-        //     console.log(scope.expenses_form.date);
-        //   }
-          
-        //   scope.initializeDatePicker();
-          
-        // });
 
       }
     }

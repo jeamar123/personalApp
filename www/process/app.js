@@ -131,16 +131,6 @@ var app = angular.module('starter', ['ionic','appService','chart.js','ionic-date
     // cache : false
   })
 
-  .state('app.expenses-overview', {
-    url: "/expenses-overview",
-    views: {
-      'main-view': {
-        templateUrl: "templates/expenses-overview.html"
-      }
-    }  ,
-    // cache : false
-  })
 
-
-  $urlRouterProvider.otherwise('/app/wall');
+  $urlRouterProvider.otherwise('/app/expenses');
 });

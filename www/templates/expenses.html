@@ -17,7 +17,7 @@
             </canvas>
             <div class="white-space-20"></div>
           </div>
-
+          
           <div class="stat-box">
             <label class="font-12 text-weight-700">Monthly Budget</label>
             <p class="text-center text-weight-700 value">
@@ -80,7 +80,7 @@
           <p ng-if="add_success" class="text-success text-center text-weight-700"><i class="fa fa-check color-green"></i> Successfully added</p>
           <p ng-if="add_error" class="text-error text-center text-weight-700"><i class="fa fa-times color-red"></i> Something went wrong</p>
           <button ng-disabled="!expenses_form.date || !expenses_form.category_name || !expenses_form.category_name || !expenses_form.desc || !expenses_form.value" class="button btn-add-expenses" ng-click="submitExpenses(expenses_form)">SUBMIT</button>
-          <button class="button btn-cancel " ng-click="toggleAddExpenses()">CANCEL</button>
+          <!-- <button class="button btn-cancel " ng-click="toggleAddExpenses()">CANCEL</button> -->
           
         </div>
       </div>
@@ -119,7 +119,7 @@
                   <a href="javascript:void(0)" >
                     <i class="fa fa-search margin-right-5 color-black-555"></i>
                   </a>
-                  <label class="font-14 text-weight-700" ng-bind="date.date"></label> 
+                  <label class="font-14 text-weight-700">( <span ng-bind="date.day"></span> ) <span ng-bind="date.date"></span></label> 
                   
                   <span class="pull-right font-14 text-weight-700">$ <span ng-bind="date.daily_total">100</span></span>
                 </p>
@@ -168,7 +168,6 @@
             <ul class="list" >
               <li ng-repeat="cat in category_list" class="item cat-item" ng-class="{'delete_active': delCategoryShow && cat.active, 'update_active': editCategoryShow && cat.active}" ng-click="toggleCategory( cat )">
                 <span ng-bind="cat.category_name"></span> 
-                  <i ng-if="cat.show && !delCategoryShow && !editCategoryShow && !isCategoryOptShow" class="fa fa-check color-green pull-right"></i>
                   <i ng-if="delCategoryShow" class="fa fa-times color-red pull-right"></i>
                   <i ng-if="editCategoryShow" class="fa fa-pencil color-gray pull-right"></i>
                 </span>
@@ -216,6 +215,7 @@
     
 
   </ion-content>
+
   <div ng-if="isCategoryOptShow" class="bottom-category-tabs">
     <div class="opt-tab" ng-class="{'active' : addCategoryShow}" ng-click="toggleAddCategory()">
       <i class="fa fa-plus"></i>
